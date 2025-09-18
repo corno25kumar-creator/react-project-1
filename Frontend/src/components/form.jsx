@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-function TaskForm({ onSubmit }) {
+function TaskForm({ onSubmit, initialData = {} }) {
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -8,13 +8,22 @@ function TaskForm({ onSubmit }) {
     endDate: "",
   });
 
+  useEffect(() => {
+    setFormData({
+      title: initialData.title || "",
+      description: initialData.description || "",
+      startDate: initialData.startDate || "",
+      endDate: initialData.endDate || "",
+    });
+  }, [initialData]);
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit(formData); // ✅ Send data to parent and hide form
+    onSubmit(formData);
   };
 
   return (
@@ -22,7 +31,9 @@ function TaskForm({ onSubmit }) {
       onSubmit={handleSubmit}
       className="absolute top-[30%] left-[30%] bg-white max-w-md w-full mx-auto border p-6 rounded-lg shadow-md flex flex-col gap-4"
     >
-      <h2 className="text-2xl font-bold text-center text-gray-800">Create Task</h2>
+      <h2 className="text-2xl font-bold text-center text-gray-800">
+        {initialData.title ? "Edit Task" : "Create Task"}
+      </h2>
 
       <input
         type="text"
