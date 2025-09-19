@@ -1,11 +1,18 @@
-const express = require("express");
-const cors = require("cors");
-const taskRoutes = require("./routes/tasks");
+import express from "express";
+import dotenv from "dotenv";
+import cors from "cors";
+import taskRoutes from "./routes/tasks.js";
 
+dotenv.config();
 const app = express();
-app.use(cors());
+
+app.use(cors({
+  origin: "http://localhost:5173",
+  credentials: true
+}));
 app.use(express.json());
 
 app.use("/api/tasks", taskRoutes);
 
-app.listen(5000, () => console.log("Server running on port 5000"));
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
